@@ -6,4 +6,4 @@ This project was inspired by a blog post written by Julia Silge analyzing the se
 
 - The .R script file contains my original functions and analysis
 - The .Rmd file creates an html document with my analysis and (witty?) commentary
-- The resulting html file, which can be viewed rendered here: https://cdn.rawgit.com/eveskew/rap_album_sentiment_analysis/master/rap_album_sentiment_analysis.html
+- The resulting html file, which can be viewed rendered here: URL PENDING
