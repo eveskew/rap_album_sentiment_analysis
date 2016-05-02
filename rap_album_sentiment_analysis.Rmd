@@ -1,12 +1,14 @@
 ---
 title: "I Miss The Old Kanye?"
 author: "Evan Eskew"
-date: "02 May 2016"
+date: "05.01.2016"
 output:
   html_document:
     theme: spacelab
   pdf_document: default
 ---
+
+&nbsp; <!-- inserting extra blank line --> 
 
 ```{r, echo = F, out.width = 200, fig.align = "center", fig.retina = NULL}
 
@@ -18,18 +20,18 @@ knitr::include_graphics("images/kanye_head.png")
 # It Begins...
 
 This whole thing started after I read an 
-<a href="http://juliasilge.com/blog/If-I-Loved-NLP-Less/" target="_blank">excellent blog post by Julia Silge</a>. You should definitely check it out, but the short version is that she used language processing tools within R to analyze the sentiment in Jane Austen's novels. This led to the natural question: could I do this with rap albums? I didn't learn R coding just to write a dissertation, right?!
+<a href="http://juliasilge.com/blog/If-I-Loved-NLP-Less/" target="_blank">excellent blog post by Julia Silge</a>. You should definitely check it out, but the short version is that she used language processing tools within R to analyze the sentiment in Jane Austen's novels. This led me to ask: can I do this with rap albums? I didn't learn R coding just to write a dissertation, right?!
 
-In the same way that Julia looked at Austen's entire body of work, I thought it would be interesting to look at one musical artist's whole commercial output. Within hip hop, Kanye seems like a natural choice. He's got seven albums out, which I'd argue encompass a greater musical diversity than probably any other recent, popular musician. Some of his later albums, particulalry *808s & Heartbreak* and *Yeezus* have been polarizing, even for fans of his early work. So his catalog seems ripe for a sentiment analysis. Would the sentiment analysis indicate major differences in feeling across his career arc? Is there really an 
+In the same way that Julia looked at Jane Austen's entire body of work, I thought it would be interesting to analyze one musical artist's whole commercial output. Within hip hop, Kanye seems like a natural choice. He's got seven albums out, which I'd argue encompass a greater musical diversity than probably any other recent, popular musician. Some of his later albums, particularly *808s & Heartbreak* and *Yeezus* have been polarizing, even for fans of his early stuff. In short, his catalog seems ripe for a sentiment analysis. Would such an analysis reveal major differences in feeling across his career arc? Is there really an 
 <a href="http://www.hillydilly.com/2016/02/kanye-west-i-love-kanye-stefan-ponce-version/" target="_blank">"old Kanye" to miss</a>, lyrically speaking?
 
-Anyways, what follows is my best shot at this analysis. Major credit to Julia Silge here. My work followed pretty easily from the code she had already written. And since we're dealing with hip hop here, let's not say I stole her code. I sampled it. I remixed it. If you don't care anything about how I actually did the analysis in R, you can skip **The Geeky Stuff** section and head right along to **The Rap Stuff**.
+What follows is my best shot at this analysis. Major credit to Julia Silge here. My work followed pretty easily from the code she already had written. In the parlance of hip hop, I sampled her code and remixed it a little. If you don't care anything about how I actually did the analysis in R, you can skip **The Geek Stuff** section and head right along to **The Rap Stuff**.
 
 &nbsp; <!-- inserting extra blank line --> 
 
-# The Geeky Stuff
+# The Geek Stuff
 
-In thinking about the general problem, it seemed to me there were three major steps to the analysis:
+In thinking about this sentiment analysis project, it seemed to me there were three major steps:
 
 1.  Get the lyrics for the albums that I want to analyze. Julia already had this solved for her work because she had the text of Austen's novels packaged up nice and neat. I was starting from scratch.
 
@@ -40,17 +42,18 @@ In thinking about the general problem, it seemed to me there were three major st
 
 Here's how I went about addressing these tasks:
 
-1.  In thinking about how to get lyrics I wanted, the answer seemed pretty obvious to me: the website 
-<a href="http://genius.com/" target="_blank">*Genius*</a> (formerly *Rap Genius*). If you haven't checked out *Genius*, you should. It's essentially a wiki-type site dedicated to song lyrics. Contributors both transcribe the lyrics and annotate them for meaning. For my purposes, I just needed to get the lyrics out of the webpages and into R, preferably for whole albums at once. To do this, I used the handy R package 
-<a href="https://github.com/hadley/rvest" target="_blank">`rvest`</a>. It was my first time using it, but it allowed me to scrape lyrics off the web quickly and easily. I wrote a few R functions that allowed me to simply input the *Genius* page of the album I was interested in and pretty quickly process the entire album's worth of lyrics.
+1.  To get the lyrics I wanted, the best source seemed pretty obvious to me: the website 
+<a href="http://genius.com/" target="_blank">*Genius*</a> (formerly *Rap Genius*). If you haven't browsed *Genius*, you should. It's essentially a wiki-type site dedicated to song lyrics. Contributors both transcribe the lyrics and annotate them for meaning. For my purposes, I just needed to get the lyrics out of the webpages and into R, preferably for whole albums at once. To do this, I used the R package 
+<a href="https://github.com/hadley/rvest" target="_blank">`rvest`</a>. It was my first time working with it, but it helped me scrape lyrics off the web quickly and easily. I wrote a few R functions that allowed me to simply input the *Genius* page of the album I was interested in and process the entire album's worth of lyrics.
 
-2.  For the sentiment analysis, I just followed Julia's lead. Major disclaimer: I know very little about sentiment analysis. My basic understanding is that it's used to quantify the subject feelings that are present in a written text. Julia has a nice comparison of metrics that might be used to compute sentiment scores, and she settled on the `bing` method from the package `syuzhet` since it did not seem to be biased or overly variable. Good enough for her, good enough for me.
+2.  For the sentiment analysis, I just followed Julia's lead. Major disclaimer: I know very little about sentiment analysis. My basic understanding is that it's used to quantify the subjective feeling in a text. Julia has a nice comparison of metrics that might be used to compute sentiment scores. She settled on the `bing` method from the package `syuzhet` since it did not seem to be directionally biased or overly variable. Good enough for her, good enough for me.
 
-3.  Again, I followed Julia's example here. I thought her visuals using `ggplot2` looked really nice, so I just modified her code slightly. Whereas Julia was analyzing an entire novel's worth of text at once, my texts had clear dividing points since an album is made up of discrete tracks. Thus, I added some visual elements to the plots to help distinguish between tracks within an album.
+3.  Again, I followed Julia's example here. I thought her visuals using `ggplot2` looked really nice, so I just modified her code slightly. Whereas Julia was analyzing novel-length texts, my texts had clear dividing points since an album is made up of discrete tracks. Thus, I added some visual elements to the plots to help distinguish between tracks within an album.
 
-All these tasks can be done with surprisingly few R packages. Here's what I used:
+This entire analysis can be done with surprisingly few R packages. To summarize, I'm using `dplyr` for general data manipulation, `rvest` for web scraping, `stringr` for manipulation of lyrics once I get them into R, `syuzhet` to conduct the sentiment analysis, and `ggplot2` and `png` to create the plots. If you want to know more than that, check out all the code on 
+<a href="https://github.com/eveskew/rap_album_sentiment_analysis" target="_blank">the GitHub repository</a>.
 
-```{r, message = F, warning = F}
+``` {r, include = F}
 
 library(dplyr)
 library(rvest)
@@ -58,11 +61,7 @@ library(stringr)
 library(syuzhet)
 library(ggplot2)
 library(png)
-```
 
-To summarize, I'm using `dplyr` for general data manipulation, `rvest` for web scraping, `stringr` for manipulation of lyrics once I get them into R, `syuzhet` to conduct the sentiment analysis, and `ggplot2` and `png` to create the plots.
-
-``` {r, include = F}
 
 # Define functions used in downstream analysis
 
@@ -244,11 +243,11 @@ plot_sentiment <- function(mySentiment, myAnnotate, mySplits, myImage) {
 
 # The Rap Stuff
 
-Ok, let's get on with it already. But first, one revelation: I lied about this being just about Kanye. I wanted to "ground truth" the method with some other popular hip hop albums (and just because I thought it'd be fun). The first album that came to mind was Kendrick Lamar's *To Pimp A Butterfly*, so that's what I did first. For just this first plot, I'll show you the code. Here's the entire analysis for this album:
+Ok, let's see some results! But first, one revelation: I lied. This project is not just about Kanye. I wanted to "ground truth" the sentiment analysis method with some other popular hip hop albums (and just because I was interested). The first album that came to mind was Kendrick Lamar's *To Pimp A Butterfly* (*TPAB*), so that's what I did first:
 
 &nbsp; <!-- inserting extra blank line --> 
 
-```{r tpab_analysis, fig.width = 15, fig.height = 7, fig.align = "center", warning = F}
+```{r tpab_analysis, fig.width = 15, fig.height = 7, fig.align = "center", echo = F, warning = F}
 
 # To Pimp A Butterfly Analysis
 
@@ -288,19 +287,21 @@ p.tpab +
 
 &nbsp; <!-- inserting extra blank line -->
 
-So you see that the resulting plot is very similar to what Julia produced in her analyses, except I've used vertical dotted lines to delineate tracks within an album. I also plotted positive sentiments in green and negative sentiments in red just to make the difference more obvious. I think this is also a good time to mention that I really have no idea how well this `bing` sentiment method may or may not be doing in analyzing a hip hop album. The *Genius* community certainly does a very thorough job of annotating albums, but I would imagine that much of the content of these albums is quite unusual for such an analysis. To give you an idea, here's one of the chunks of *To Pimp A Butterfly*:
+The resulting sentiment plot is very similar to what Julia produced in her analyses, except I've used vertical dotted lines to delineate tracks within an album. I also plotted positive sentiments in green and negative sentiments in red just to make the difference more obvious. I think this is also a good time to mention that I really have no idea how well this `bing` sentiment method may or may not be doing in analyzing a hip hop album. The *Genius* user community certainly does a very thorough job of transcribing lyrics accurately, but I would imagine that much of the content of these albums is quite unusual for such an analysis. To give you an idea, here are a few bars from my personal favorite on *TPAB*, 
+"<a href="https://www.youtube.com/watch?v=ZO-ZsW0orlk" target="_blank">Momma</a>":
 
 ```{r, echo = F}
 
-tpab.chunked$text[69]
+tpab.album[669:676]
 ```
 
-If you've heard any of the albums I'll be analyzing, you know it gets a lot more colorful than that. So I'd say that while these methods are capable of giving us answers, I'd take it all with a grain of salt. 
+If you've heard any of the albums I'll be analyzing, you know it gets a lot more colorful than that. So while these sentiment analysis methods are capable of giving us "answers", I'd take everything with a grain of salt. 
 
-I don't think there are ton of surprises here.
+For this album, I think the analysis confirms what many listeners would intuit: the general mood is pretty negative. The tracks with the most negative scores include "King Kunta," "u," "Hood Politics," and "The Blacker The Berry." These tracks highlight one of the interesting things about sentiment analysis applied to music lyrics: sometimes tracks that are musically dark also have negative lyrics, but not always. For example,
+"<a href="https://www.youtube.com/watch?v=e5Ri76UodWM" target="_blank">u</a>" is a pretty devastating reflection on (a lack of) self-worth. I would expect it to have a strongly negative sentiment, which it does. And the music matches this content: it *sounds* like a negative song. In contrast, "Hood Politics" is decidedly more upbeat musically yet has a negative lyrical sentiment according to the metrics. So keep that potential tension between music and lyrics in mind.
 
 Since I did a Kendrick album, I felt obligated to give Drake some attention too. 
-<a href="http://www.rollingstone.com/music/news/barack-obama-declares-kendrick-lamar-better-than-drake-20160115" target="_blank">The President may have given Kendrick the nod</a>, but what do the numbers look like? People could argue about this (and people I know will probably argue with me about this), but I think *Take Care* is probably his best album to this point, so let's plot that one:
+<a href="http://www.rollingstone.com/music/news/barack-obama-declares-kendrick-lamar-better-than-drake-20160115" target="_blank">President Obama may have given Kendrick the nod</a>, but what does the sentiment tell us? A lot of people would vote *Take Care* as Drake's best album to this point, so let's plot that one:
 
 &nbsp; <!-- inserting extra blank line --> 
 
@@ -338,6 +339,13 @@ p.tc <- plot_sentiment(tc.sentiment, tc.anno, tc.tracksplits, tc.image)
 p.tc + labs(title = 
            expression(paste("Sentiment in ", italic("Take Care"))))
 ```
+
+&nbsp; <!-- inserting extra blank line --> 
+
+Given that Drake has self-identified as
+<a href="http://genius.com/434477" target="_blank">being all in his feelings</a>, it was a bit of a surprise to me that *Take Care* was actually less negative than *TPAB*. *TPAB* has five songs that dip down below -5 on the sentiment scale. *Take Care* has only one: "Take Care." While *Take Care*'s tracks don't get *as* negative as Kendrick's on *TPAB*, they're still negative. In fact, the album starts with a run of seven pretty solidly negative songs: "Over My Dead Body" through "Buried Alive (Interlude)." In contrast, there are positive peaks in tracks like "Make Me Proud" and "The Real Her."
+
+At this point I was just having fun with it, so I decided I also had to do two inarguable classics of the genre: Nas' *Illmatic* and Jay-Z's *The Blueprint*.
 
 &nbsp; <!-- inserting extra blank line --> 
 
@@ -408,11 +416,21 @@ p.bp +
 
 &nbsp; <!-- inserting extra blank line -->  
 
+Well, yeah, that makes sense. *Illmatic* is pretty unremittingly bleak. The album is an artistic masterpiece and arguably the best ever in hip hop. But it's definitely not happy. Ironically, the song with the most negative section is 
+"<a href="https://www.youtube.com/watch?v=hxce_qvhi5I" target="_blank">One Love</a>." Then again, the song is written to someone who's locked up. 
+
+*The Blueprint* is a much more balanced album overall. Its contours are similar in a way to *Take Care*: never too negative and some noticeable peaks in positivity. The sentiment analysis largely gels with my expectations. I think songs with very negative sentiment scores like "Takeover," 
+"<a href="https://www.youtube.com/watch?v=w5srnNrICJo" target="_blank">Song Cry</a>" (Jay must really be feeling this one after *LEMONADE*), and the Eminem-produced "Renegade" would certainly sound that way to your average listener.
+
 ### The Kanye Canon
 
-Ok, we're finally moving into the Kanye stuff. But first let's just take a moment to remember 
-<a href="https://www.youtube.com/watch?v=xm0n9P5tDiU" target="_blank">the pure, luxurious soul this man gave us</a>. You could have your first wedding dance to that. In fact, you probably should. Let's also not forget when he helped Bob Simon understand a 
-<a href="https://www.youtube.com/watch?v=EgeuM-MjBks" target="_blank">"dope ass beat"</a> (also known as a "really good track").
+Ok, ok, onto the Kanye stuff. To prepare, let's just take a moment to remember 
+<a href="https://www.youtube.com/watch?v=xm0n9P5tDiU" target="_blank">the ebullient soul this man gave us</a>. You could have your first wedding dance to that. In fact, you probably should. Let's also not forget when he helped Bob Simon understand a 
+"<a href="https://www.youtube.com/watch?v=EgeuM-MjBks" target="_blank">dope ass beat</a>" (also known as a "really good track").
+
+I'm going to arbitrarily present the Kanye catalog in three chunks: his first three albums (*The College Dropout*, *Late Registration*, and *Graduation*), his fourth and fifth (*808s & Heartbreak* and *My Beautiful Dark Twisted Fantasy*), and his last two (*Yeezus* and *The Life Of Pablo*). Alright, here are the first three albums, the three that fans of the "old Kanye" probably like best:
+
+&nbsp; <!-- inserting extra blank line -->
 
 ```{r cd_analysis, fig.width = 15, fig.height = 7, fig.align = "center", echo = F, warning = F}
 
@@ -483,7 +501,7 @@ lr.anno <- data.frame(x = find_middle(lr.tracksplits, lr.chunked),
                                 "Touch The Sky", "Gold Digger",
                                 "Skit #1", "Drive Slow", "My Way...",
                                 "Crack Music", "Roses", "Bring Me...",
-                                "Addiction", "Skit #2", "Diam... (Remix)",
+                                "Add...", "Skit #2", "Diam... (Remix)",
                                 "We Major", "Skit #3", "Hey Mama",
                                 "Celebration", "Skit #4", "Gone",
                                 "Diam...", "Late", "Back To Basics",
@@ -533,8 +551,10 @@ p.grad + labs(title =
 
 &nbsp; <!-- inserting extra blank line -->  
 
-"Bittersweet Poetry" is bringing down the whole sentiment of this album, but it also gave us 
+I think the main takeaway from these plots is that early Kanye had pretty positive lyrics (and a ton of tracks on his albums). Of course this lyrical content was mirrored musically by Kanye's soul-influenced production from this period. In particular, I think the first run of songs on *Graduation*, "Good Morning" through "Good Life", is notable for having almost entirely positive sentiment. That stretch is pretty unique in all the albums we've looked at so far. If you're a die-hard fan, you'll notice there are bonus tracks included in my analysis. I didn't make these decisions; I just took what *Genius* had for the complete album tracklists. These inclusions are not insignificant: "Bittersweet Poetry" for instance is a bit of a negative outlier on *Graduation*. But it also gave us 
 <a href="https://www.youtube.com/watch?v=IhsXrjdiMaA" target="_blank">this interaction</a>, so let's call it an even trade.
+
+Let's look at the albums where it really went off (and then back on) the rails for some folks, *808s & Heartbreak* and *My Beautiful Dark Twisted Fantasy* (*MBDTF*):
 
 &nbsp; <!-- inserting extra blank line -->
 
@@ -612,6 +632,16 @@ p.mbdtf +
 
 &nbsp; <!-- inserting extra blank line -->  
 
+Many people, myself included, were at least initially put off by *808s & Heartbreak* because of its musical and lyrical stylings. It was a sad pop album by a once-in-a-generation hip hop artist. I think this shift is reflected in the sentiment analysis but in a different way than one might expect. *808s* is *not* overwhelming negative, but its sentiment *is* much more muted than Kanye's prior albums. There aren't as many highs or lows. It's an album of neutrals. There are also just a lot fewer words overall on this album. You can see that indicated by the fact that there simply aren't as many lyrical chunks analyzed for sentiment in the *808s* plot. If you've listened to the album, you know this. The last half of "Say You Will," for instance, is just an instrumental beeping and blooping its way towards finality. There's not a lot of levity on this album, but even so, a few tracks like "Love Lockdown," "Street Lights," and "Bad News" got largely positive sentiment scores. I don't totally know what to make of that.
+
+*MBDTF* was Kanye's return to a more grandiose production style. Kanye let us know 
+<a href="https://www.youtube.com/watch?v=Jg5wkZ-dJXA" target="_blank">he was making Art here</a>. 
+<a href="http://pitchfork.com/reviews/albums/14880-my-beautiful-dark-twisted-fantasy/" target="_blank">Pitchfork gave it a straight 10</a>. However, it's also beloved by more casual fans. The biggest surprise to me is that *MBDTF* is in no way a return to a lighter sentiment for Kanye. In fact, it ranks as the most negative album in his entire discography. Without bonus track "See Me Now," it would be even darker. In this case, critical acclaim and fan affection were earned despite some apparently depressing content.
+
+Finally, here's the sentiment analysis for Kanye's two most recent albums, *Yeezus* and *The Life of Pablo* (*TLOP*):
+
+&nbsp; <!-- inserting extra blank line --> 
+
 ```{r yeezus_analysis, fig.width = 15, fig.height = 7, fig.align = "center", echo = F, warning = F}
 
 # Yeezus Analysis
@@ -671,7 +701,7 @@ tlop.sentiment <- process_sentiment(tlop.album, "bing")
 
 tlop.anno <- data.frame(x = find_middle(tlop.tracksplits, tlop.chunked),
                           y = rep(c(11, 9), 20)[1:length(tlop.tracksplits)], 
-                          label = c("Ultralight Beams", "Father... Pt. 1",
+                          label = c("Ultralight Beam", "Father... Pt. 1",
                                     "Father... Pt. 2", "Famous", "Feedback",
                                     "Low Lights", "Highlights", "Free...",
                                     "I Love Kanye", "Waves", "FML",
@@ -690,7 +720,12 @@ p.tlop + labs(title =
 
 &nbsp; <!-- inserting extra blank line -->  
 
-We can also summarize sentiment across albums:
+For a lot of people, I imagine *Yeezus* was an equivalent shock to *808s* except instead of being extremely sad, Kanye seemed extremely angry. This negative sentiment shows in the analysis. The first five songs of *Graduation* were almost entirely positive. *Yeezus* starts with the inverse of that; "On Sight" through "Hold My Liquor" are almost entirely negative. And even though album closer "Bound 2" has a distinct production style relative to the rest of *Yeezus*, its sentiment stays solidly in the red.
+
+*TLOP* is an interesting one. The album release seemed very disorganized and rushed. Musically, it's a bit disorienting, with rapid shifts in style and tone. But no doubt there's something very Kanye about it. It's an album that can't stick to any one idea because it's so excited about everything, and there are some genuinely stirring moments tucked in there 
+(<a href="https://www.youtube.com/watch?v=9Tfp37AfQcg" target="_blank">Chance's verse on "Ultralight Beam!"</a>). The overall impression from the sentiment analysis of *TLOP* is very similar to Kanye's first three albums, which have highs and lows in roughly equal measure.
+
+To help summarize sentiment across Kanye's entire catalog, here's a table showing the average sentiment for each album and the variance in sentiment within that album:
 
 ```{r kanye_df, echo = F, warning = F}
 
@@ -711,19 +746,9 @@ colnames(df.kanye) <- c("Album Title", "Sentiment Mean", "Sentiment Variance")
 df.kanye
 ```
 
-&nbsp; <!-- inserting extra blank line -->
+These numbers help confirm a few things you may have picked up from looking at the sentiment plots. Kanye's first three albums were characterized by having a positive average sentiment, while every album *808s* and after has had a negative sentiment. *808s* was also notable for having the lowest variance in sentiment across Kanye's discography; it was kind of negative and more or less stayed that way throughout the album's running time. In contrast, *MBDTF* had the greatest variance in sentiment and was also the most negative of any album. Since then, however, Kanye's albums have been trending upwards in sentiment. 
 
-# Today's Material
-
-> Easy writing makes hard reading.  
-<cite>- Ernest Hemingway</cite>
-
-> Writing is failure. Over and over and over again.  
-<cite>- Ta-Nehisi Coates</cite>
-
-&nbsp; <!-- inserting extra blank line -->
-
-# Hope You Enjoyed!
+In sum, I think this sentiment analysis helps us understand Kanye a little better. Some of his success is undoubtedly attributable to the fact that he's had the self-confidence to plunge headfirst into new musical waters, exploring styles as inspiration hits rather than being bound by conventions of popularity. Similarly, I think his willingness to cover broad swaths of lyrical content, all of life from the highs to the lows, is reflected in this sentiment analysis. His albums vary in average sentiment, and for many of them, there's also considerable variation within an album. Good news though for fans of the old Kanye: if the sentiment metrics are any indication, over the course of the last few albums he's heading more and more back to where he started. 
 
 &nbsp; <!-- inserting extra blank line -->
 

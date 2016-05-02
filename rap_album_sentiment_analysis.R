@@ -1,6 +1,6 @@
 # An R Project to harvest data from Genius and perform a sentiment analysis
 # Based on this blog post: http://juliasilge.com/blog/If-I-Loved-NLP-Less/
-# 04.27.2016
+# 05.01.2016
 
 
 library(dplyr)
@@ -398,7 +398,7 @@ lr.anno <- data.frame(x = find_middle(lr.tracksplits, lr.chunked),
                                 "Touch The Sky", "Gold Digger",
                                 "Skit #1", "Drive Slow", "My Way...",
                                 "Crack Music", "Roses", "Bring Me...",
-                                "Addiction", "Skit #2", "Diam... (Remix)",
+                                "Add...", "Skit #2", "Diam... (Remix)",
                                 "We Major", "Skit #3", "Hey Mama",
                                 "Celebration", "Skit #4", "Gone",
                                 "Diam...", "Late", "Back To Basics",
@@ -576,7 +576,7 @@ tlop.sentiment <- process_sentiment(tlop.album, "bing")
 
 tlop.anno <- data.frame(x = find_middle(tlop.tracksplits, tlop.chunked),
                           y = rep(c(11, 9), 20)[1:length(tlop.tracksplits)], 
-                          label = c("Ultralight Beams", "Father... Pt. 1",
+                          label = c("Ultralight Beam", "Father... Pt. 1",
                                     "Father... Pt. 2", "Famous", "Feedback",
                                     "Low Lights", "Highlights", "Free...",
                                     "I Love Kanye", "Waves", "FML",
