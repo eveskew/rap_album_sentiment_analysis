@@ -6,4 +6,4 @@ This project was inspired by a blog post written by Julia Silge analyzing the se
 
 - The .R script file contains my original functions and analysis
 - The .Rmd file creates an html document with my analysis and (witty?) commentary
-- The resulting html file, which can be viewed rendered here: URL PENDING
+- The resulting html file. A rendered version of the 05.01.2016 commit is here: http://tinyurl.com/zesywjd
